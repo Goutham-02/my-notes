@@ -4,7 +4,7 @@ const User = require('../models/User')
 const { body, validationResult } = require('express-validator');
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
-const fetchUser = require('../middleware/fetchUser')
+const fetchUser = require('../middleware/fetchUser');
 
 const JWT_SECRET = "findwhatyouloveandletitkillyou";
 
@@ -37,7 +37,7 @@ router.post('/createUser', [
 
         const data = {
             user: {
-                is: user.id
+                id: user.id
             }
         };
 
@@ -98,7 +98,7 @@ router.post('/getuser', fetchUser, async (req, res) => {
         res.send(user);
     } catch (error) {
         console.error(error.message);
-        res.status(500).send("Internal server error!")
+        res.status(500).send("Internal server error!");
     }
 })
 module.exports = router;
