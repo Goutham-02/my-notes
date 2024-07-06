@@ -8,7 +8,6 @@ const Signup = (props) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, password } = credentials;
     const response = await fetch("http://localhost:5000/api/auth/createuser", {
       method: 'POST',
       headers: {
@@ -20,7 +19,7 @@ const Signup = (props) => {
     console.log(json);
     if (json.success) {
       //Save the auth token and redirect
-      localStorage.setItem('token', json.authtoken);
+      localStorage.setItem('token', json.authToken);
       navigate("/");
       props.showAlert("Account created successfully", "success")
     }
@@ -34,9 +33,12 @@ const Signup = (props) => {
   };
 
   return (
-    <div>
+    <div className='container mt-5'>
+      <div className="my-4">
+        <h2>Create an account to use myNotes</h2>
+      </div>
       <form onSubmit={handleSubmit}>
-        <div className="mb-3">
+        <div className="mb-3 my-4">
           <label htmlFor="name" className="form-label">Name</label>
           <input type="text" className="form-control" name="name" id="name" aria-describedby="emailHelp" onChange={onChange} />
         </div>
@@ -47,13 +49,14 @@ const Signup = (props) => {
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">Password</label>
-          <input type="password" className="form-control" name="password" id="password" onChange={onChange} required minLength={5}/>
+          <input type="password" className="form-control" name="password" id="password" onChange={onChange} required minLength={5} />
         </div>
         <div className="mb-3">
           <label htmlFor="cpassword" className="form-label">Confirm Password</label>
-          <input type="password" className="form-control" name="cpassword" id="cpassword" onChange={onChange} required minLength={5}/>
+          <input type="password" className="form-control" name="cpassword" id="cpassword" onChange={onChange} required minLength={5} />
         </div>
-        <button type="submit" className="btn btn-primary">Submit</button>
+        {credentials.password !== credentials.cpassword ? <p className='text-danger'>Passwords not maching</p> : ""}
+        <button type="submit" className="btn btn-primary" disabled={credentials.password !== credentials.cpassword}>Submit</button>
       </form>
     </div>
   )

@@ -12,7 +12,7 @@ const JWT_SECRET = "findwhatyouloveandletitkillyou";
 router.post('/createUser', [
     body('name', 'Enter a valid name').isLength({ min: 3 }),
     body('email', 'Enter a valid email').isEmail(),
-    body('password', 'Password must be atleast 8 characters').isLength({ min: 5 }),
+    body('password', 'Password must be atleast 5 characters').isLength({ min: 5 }),
 ], async (req, res) => {
     let success = false;
     //If there are errors, return Bad request and the errors
@@ -29,11 +29,13 @@ router.post('/createUser', [
         }
 
         const salt = await bcrypt.genSalt(10);
-        secPass = await bcrypt.hash(req.body.password, salt);
+        const secPass = await bcrypt.hash(req.body.password, salt);
+
+        //Create an user
         user = await User.create({
             name: req.body.name,
-            email: req.body.email,
-            password: secPass
+            password: secPass,
+            email: req.body.email
         });
 
         const data = {
@@ -82,7 +84,7 @@ router.post('/login', [
         }
         const data = {
             user: {
-                is: user.id
+                id: user.id
             }
         }
         const authToken = jwt.sign(data, JWT_SECRET);
