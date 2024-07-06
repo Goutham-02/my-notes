@@ -14,17 +14,18 @@ router.post('/createUser', [
     body('email', 'Enter a valid email').isEmail(),
     body('password', 'Password must be atleast 8 characters').isLength({ min: 5 }),
 ], async (req, res) => {
+    let success = false;
     //If there are errors, return Bad request and the errors
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-        return res.status(400).json({ errors: errors.array() });
+        return res.status(400).json({ success, errors: errors.array() });
     }
     //Check whether the user with email already exists
     try {
 
         let user = await User.findOne({ email: req.body.email })
         if (user) {
-            return res.status(400).json({ error: "Email already exists!" })
+            return res.status(400).json({ success, error: "Email already exists!" })
         }
 
         const salt = await bcrypt.genSalt(10);
@@ -42,7 +43,8 @@ router.post('/createUser', [
         };
 
         const authToken = jwt.sign(data, JWT_SECRET);
-        res.json({ authToken });
+        success = true;
+        res.json({ success, authToken });
 
     } catch (error) {
         console.error(error.message);
@@ -68,7 +70,7 @@ router.post('/login', [
 
     try {
         let user = await User.findOne({ email });
-        if (!user){
+        if (!user) {
             success = false;
             return res.status(400).json({ error: "Try to login with correct credentials" });
         }

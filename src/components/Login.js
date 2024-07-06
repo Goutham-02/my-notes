@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
-import {useNavigate} from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
 
-  const [credentials, setCredentials] = useState({email:"", password: ""})
+  const [credentials, setCredentials] = useState({ email: "", password: "" })
   let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -13,11 +13,11 @@ const Login = () => {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({email: credentials.email, password: credentials.password })
+      body: JSON.stringify({ email: credentials.email, password: credentials.password })
     });
     const json = await response.json();
     console.log(json);
-    if(json.success) {
+    if (json.success) {
       //Save the auth token and redirect
       localStorage.setItem('token', json.authtoken);
       navigate("/");
@@ -30,7 +30,7 @@ const Login = () => {
 
   const onChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value })
-};
+  };
 
   return (
     <div>
@@ -38,11 +38,11 @@ const Login = () => {
         <div className="mb-3">
           <label htmlFor="email1" className="form-label">Email address</label>
           <input value={credentials.email} onChange={onChange} name="email" type="email" className="form-control" id="email1" aria-describedby="emailHelp" />
-            <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
+          <div id="emailHelp" className="form-text">We'll never share your email with anyone else.</div>
         </div>
         <div className="mb-3">
           <label htmlFor="password" className="form-label">Password</label>
-          <input value={credentials.password} type="password" className="form-control" id="password" onChange={onChange} name="password"/>
+          <input value={credentials.password} type="password" className="form-control" id="password" onChange={onChange} name="password" />
         </div>
         <button type="submit" className="btn btn-primary">Submit</button>
       </form>
