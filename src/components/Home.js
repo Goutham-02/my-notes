@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import Notes from './Notes';
 
-const Home = () => {
+const Home = (props) => {
+  const { showAlert } = props;
   return (
     <>
-      <Notes />
+      <Notes showAlert={showAlert} />
     </>
   )
 }
